@@ -15,6 +15,8 @@ public class Task {
     @Id
     private Integer taskId;
     private String taskTitle;
+
+
     private String taskDescription;
     private Boolean completed = false;
 

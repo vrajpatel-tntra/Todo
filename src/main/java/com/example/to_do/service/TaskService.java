@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class TaskService {
+public class TaskService implements serviceInterface {
 
     @Autowired
     TaskRepo repo;
@@ -21,8 +21,8 @@ public class TaskService {
     }
 
     // POST - CREATE
-    public void addTask(Task task) {
-        repo.save(task);
+    public Task addTask(Task task) {
+        return repo.save(task);
     }
 
      // PUT - UPDATE
@@ -31,18 +31,19 @@ public class TaskService {
 //    }
 
     // UPDATE
-    public void updateTask(int taskId, Task updatedTask) {
+    public Task updateTask(int taskId, Task updatedTask) {
         Task existingTask = repo.findById(taskId)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Task with ID " + taskId + " not found"
                 ));
 
+
         existingTask.setTaskTitle(updatedTask.getTaskTitle());
         existingTask.setTaskDescription(updatedTask.getTaskDescription());
         existingTask.setCompleted(updatedTask.getCompleted());
 
-        repo.save(existingTask);
+        return  repo.save(existingTask);
     }
 
 
@@ -54,7 +55,15 @@ public class TaskService {
 //    }
 
     // DELETE
-    public void deleteTask(int taskId) {
-        repo.deleteById(taskId);
+    public Task deleteTask(int taskId) {
+        Task task = repo.findById(taskId)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Task with Id"+" not found"
+                ));
+        repo.delete(task);
+        return task;
+
+
     }
 }

@@ -2,12 +2,14 @@ package com.example.to_do.controller;
 
 import com.example.to_do.model.Task;
 import com.example.to_do.service.TaskService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.hibernate.sql.results.internal.StandardEntityGraphTraversalStateImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.ReactiveOffsetScrollPositionHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
+@Tag(name = "Todo Application",description = "Create, Read, Update, and Delete Tasks Seamlessly")
 public class TaskController {
 
     @Autowired
@@ -41,27 +44,37 @@ public class TaskController {
 //        service.addTask(task);
 //    }
 
-    public ResponseEntity<String> addTask(@RequestBody Task task){
+    public ResponseEntity<Task> addTask(@RequestBody Task task){
         try {
-            service.addTask(task);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Task created successfully");
+//            Task task1 = service.addTask(task);
+            return ResponseEntity.status(HttpStatus.OK).body(service.addTask(task));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to create task: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 
 
     @PutMapping("/putTask")
+
 //    public void updateTask(@RequestBody Task task){
 //        service.updateTask(task.getTaskId(),task);
 //    }
 
-    public ResponseEntity<String> updateTask(@RequestBody Task task) {
-        try {
-            service.updateTask(task.getTaskId(), task);
-            return ResponseEntity.ok("Task updated successfully");
-        } catch (ResponseStatusException e) {
-            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+    public ResponseEntity<Task> updateTask(@RequestBody Task task) {
+//        try {
+//            Task updateTask = service.updateTask(task.getTaskId(), task);
+//            return ResponseEntity.ok("Task updated successfully"+service.updateTask(task.getTaskId(),task));
+//        } catch (ResponseStatusException e) {
+//            return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+//        }
+        try{
+            Task updateTask = service.updateTask(task.getTaskId(),task);
+
+            return ResponseEntity.status(HttpStatus.OK).body(updateTask);
+        }
+        catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+
         }
     }
 
@@ -73,7 +86,7 @@ public class TaskController {
     public ResponseEntity<String> deleteTask(@PathVariable int taskId) {
         try {
             service.deleteTask(taskId);
-            return ResponseEntity.ok("Task deleted successfully");
+            return ResponseEntity.ok("Task deleted successfully /n Task Id : "+taskId);
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
         }
