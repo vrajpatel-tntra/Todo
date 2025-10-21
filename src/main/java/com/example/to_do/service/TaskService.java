@@ -1,5 +1,6 @@
 package com.example.to_do.service;
 
+import com.example.to_do.model.Status;
 import com.example.to_do.model.Task;
 import com.example.to_do.repository.TaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 public class TaskService implements serviceInterface {
@@ -64,6 +67,17 @@ public class TaskService implements serviceInterface {
         repo.delete(task);
         return task;
 
-
     }
+
+//    public List<Task> findByStatusDone(Status status){
+//        return repo.findByStatusDone(status);
+//    }
+//
+//    public List<Task> findByStatusProgress(Status status){
+//        return repo.findByStatusProgress(status);
+
+    public List<Task> findByStatus(Status status){
+        return repo.findByStatus(status.name());
+    }
+
 }

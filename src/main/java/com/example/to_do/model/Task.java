@@ -1,7 +1,6 @@
 package com.example.to_do.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.sql.exec.spi.StandardEntityInstanceResolver;
@@ -13,22 +12,25 @@ public class Task {
 
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer taskId;
     private String taskTitle;
-
-
     private String taskDescription;
     private Boolean completed = false;
+
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
 //    public Task() {
 //
 //    }
 
-    public Task(int taskId, String taskTitle, String taskDescription, Boolean completed){
+    public Task(int taskId, String taskTitle, String taskDescription, Boolean complete,Status status){
         this.taskId=taskId;
         this.taskTitle=taskTitle;
         this.taskDescription=taskDescription;
-        this.completed=completed;
+//      this.completed=completed;
+        this.status=status;
     }
 
 
@@ -66,5 +68,13 @@ public class Task {
     }
     public Boolean getCompleted() {
         return completed;
+    }
+
+    public Status getStatus(){
+        return status;
+    }
+
+    public void setStatus(Status status){
+        this.status=status;
     }
 }

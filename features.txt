@@ -1,10 +1,10 @@
 logger
 
-interface based architecture
+interface based architecture -
 
-filter based on status -> native sql query (custom query in repo)
+filter based on status -> native sql query (custom query in repo) -
 
-status (enum) -> 3 in sequence
+status (enum) -> 3 in sequence -
 
 test cases
 

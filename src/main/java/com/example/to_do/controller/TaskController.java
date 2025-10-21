@@ -1,15 +1,14 @@
 package com.example.to_do.controller;
 
+import com.example.to_do.model.Status;
 import com.example.to_do.model.Task;
 import com.example.to_do.service.TaskService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.hibernate.sql.results.internal.StandardEntityGraphTraversalStateImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.ReactiveOffsetScrollPositionHandlerMethodArgumentResolver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +37,7 @@ public class TaskController {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return service.getTasks(pageable);
     }
+
 
     @PostMapping("/postTask")
 //    public void addTask(@RequestBody Task task){
@@ -86,9 +86,25 @@ public class TaskController {
     public ResponseEntity<String> deleteTask(@PathVariable int taskId) {
         try {
             service.deleteTask(taskId);
-            return ResponseEntity.ok("Task deleted successfully /n Task Id : "+taskId);
+            return ResponseEntity.ok("Task deleted successfully /n Task Id : " + taskId);
         } catch (ResponseStatusException e) {
             return ResponseEntity.status(e.getStatusCode()).body(e.getReason());
+
         }
+    }
+
+//    @GetMapping("/getStatus/{status}")
+//    public List<Task> findByStatusDone(@PathVariable Status status){
+//        return service.findByStatusDone(status);
+//    }
+//
+//    @GetMapping("/getStatus/p/{status}")
+//    public List<Task> findByStatusProgress(@PathVariable Status status){
+//        return  service.findByStatusProgress(status);
+//    }
+
+    @GetMapping("/getStatus/{status}")
+    public List<Task> findByStatus(@PathVariable("status") Status status){
+        return service.findByStatus(status);
     }
 }
