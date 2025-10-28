@@ -7,9 +7,8 @@ import org.hibernate.sql.exec.spi.StandardEntityInstanceResolver;
 
 @Data
 @Entity
-@NoArgsConstructor
-public class Task {
 
+public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,9 +20,9 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-//    public Task() {
-//
-//    }
+    // ✅ No-args constructor (required by JPA + useful for testing)
+    public Task() {
+    }
 
     public Task(int taskId, String taskTitle, String taskDescription, Boolean complete,Status status){
         this.taskId=taskId;
